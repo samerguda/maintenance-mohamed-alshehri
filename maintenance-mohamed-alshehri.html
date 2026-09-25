@@ -13,6 +13,8 @@
       --accent: #00897b;
       --accent-light: #e0f2f1;
       --border-color: #e5e7eb;
+      --whatsapp-color: #25d366;
+      --whatsapp-bg: #e8f8ef;
     }
 
     * {
@@ -42,7 +44,7 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
       margin-bottom: 2rem;
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
     }
 
     .clock-time {
@@ -65,7 +67,7 @@
       border-radius: 24px;
       padding: 1.75rem;
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     }
 
@@ -94,6 +96,7 @@
       align-items: center;
       padding-bottom: 0.75rem;
       border-bottom: 1px solid #f3f4f6;
+      gap: 0.5rem;
     }
 
     .detail-item:last-child {
@@ -101,8 +104,13 @@
       padding-bottom: 0;
     }
 
+    .info-group {
+      display: flex;
+      flex-direction: column;
+    }
+
     .label {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
       font-weight: 500;
     }
@@ -111,25 +119,87 @@
       font-size: 0.95rem;
       font-weight: 600;
       color: var(--text-main);
-      text-align: right;
     }
 
-    .download-button {
-      margin-top: 1.5rem;
-      background-color: var(--accent-light);
+    /* Copy Button */
+    .btn-copy {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-copy:hover {
+      background: var(--accent-light);
       color: var(--accent);
-      border: 1px solid var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Action Buttons */
+    .actions-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-action {
       border-radius: 12px;
       padding: 0.85rem;
       text-align: center;
       font-weight: 600;
       font-size: 0.95rem;
       cursor: pointer;
-      transition: background-color 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
     }
 
-    .download-button:hover {
+    .btn-whatsapp {
+      background-color: var(--whatsapp-bg);
+      color: #0f5132;
+      border: 1px solid var(--whatsapp-color);
+    }
+
+    .btn-whatsapp:hover {
+      background-color: #d1e7dd;
+    }
+
+    .btn-rib {
+      background-color: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .btn-rib:hover {
       background-color: #b2dfdb;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      background: #111827;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
     }
   </style>
 </head>
@@ -148,58 +218,123 @@
     </div>
 
     <div class="details-list">
+      
       <div class="detail-item">
-        <span class="label">Naam rekeninghouder</span>
-        <span class="value">MME MOUNYA HAFIDI</span>
+        <div class="info-group">
+          <span class="label">Naam rekeninghouder</span>
+          <span class="value" id="val-naam">MME MOUNYA HAFIDI</span>
+        </div>
+        <button class="btn-copy" onclick="copyText('MME MOUNYA HAFIDI', 'Naam')">نسخ</button>
       </div>
 
       <div class="detail-item">
-        <span class="label">Benaming rekening</span>
-        <span class="value">MME MOUNYA HAFIDI</span>
+        <div class="info-group">
+          <span class="label">Benaming rekening</span>
+          <span class="value" id="val-benaming">MME MOUNYA HAFIDI</span>
+        </div>
+        <button class="btn-copy" onclick="copyText('MME MOUNYA HAFIDI', 'Benaming')">نسخ</button>
       </div>
 
       <div class="detail-item">
-        <span class="label">Rekeningnummer</span>
-        <span class="value">BE80 0004 3273 4477</span>
+        <div class="info-group">
+          <span class="label">Rekeningnummer</span>
+          <span class="value" id="val-iban">BE80 0004 3273 4477</span>
+        </div>
+        <button class="btn-copy" onclick="copyText('BE80 0004 3273 4477', 'Rekeningnummer')">نسخ</button>
       </div>
 
       <div class="detail-item">
-        <span class="label">BIC</span>
-        <span class="value">GEBABEBB</span>
+        <div class="info-group">
+          <span class="label">BIC</span>
+          <span class="value" id="val-bic">GEBABEBB</span>
+        </div>
+        <button class="btn-copy" onclick="copyText('GEBABEBB', 'BIC')">نسخ</button>
       </div>
 
       <div class="detail-item">
-        <span class="label">Uw relatie tot de rekening</span>
-        <span class="value">Titulaire</span>
+        <div class="info-group">
+          <span class="label">Uw relatie tot de rekening</span>
+          <span class="value">Titulaire</span>
+        </div>
+        <button class="btn-copy" onclick="copyText('Titulaire', 'Relatie')">نسخ</button>
       </div>
 
       <div class="detail-item">
-        <span class="label">Rekeningtype</span>
-        <span class="value">Pack Easy Go</span>
+        <div class="info-group">
+          <span class="label">Rekeningtype</span>
+          <span class="value">Pack Easy Go</span>
+        </div>
+        <button class="btn-copy" onclick="copyText('Pack Easy Go', 'Rekeningtype')">نسخ</button>
       </div>
+
     </div>
 
-    <div class="download-button">
-      Download attest identificatie rekening (RIB)
+    <!-- Action Buttons -->
+    <div class="actions-group">
+      <a href="#" class="btn-action btn-whatsapp" onclick="sendWhatsApp(event)">
+        💬 إرسال التفاصيل عبر WhatsApp
+      </a>
+      <div class="btn-action btn-rib" onclick="copyAllDetails()">
+        📋 نسخ جميع البيانات
+      </div>
     </div>
   </div>
 
+  <div class="toast" id="toast">تم النسخ بنجاح!</div>
+
   <script>
+    // Live Clock Logic
     function updateClock() {
       const now = new Date();
       
-      // Formatting Time (12-hour format with AM/PM)
       const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
       document.getElementById('time').textContent = now.toLocaleTimeString('en-US', timeOptions);
 
-      // Formatting Date in Arabic
       const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       document.getElementById('date').textContent = now.toLocaleDateString('ar-EG', dateOptions);
     }
 
-    // Run clock on load and update every second
     updateClock();
     setInterval(updateClock, 1000);
+
+    // Toast Notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // Copy Single Field
+    function copyText(text, label) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`تم نسخ ${label}`);
+      });
+    }
+
+    // Get Formatted Details Text
+    function getFormattedDetails() {
+      return `🏦 *Details van de rekening*\n\n` +
+             `👤 *Naam:* MME MOUNYA HAFIDI\n` +
+             `💳 *IBAN:* BE80 0004 3273 4477\n` +
+             `🏦 *BIC:* GEBABEBB\n` +
+             `📋 *Type:* Pack Easy Go`;
+    }
+
+    // Copy All Details
+    function copyAllDetails() {
+      const fullText = getFormattedDetails();
+      navigator.clipboard.writeText(fullText).then(() => {
+        showToast('تم نسخ جميع البيانات بنجاح!');
+      });
+    }
+
+    // Send via WhatsApp
+    function sendWhatsApp(event) {
+      event.preventDefault();
+      const text = encodeURIComponent(getFormattedDetails());
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
   </script>
 </body>
 </html>
